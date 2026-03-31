@@ -13,6 +13,9 @@
 #include "CameraSetting/OasisCameraSetting_RotationLag.h"
 #include "CameraSetting/OasisCameraSetting_RotationOffset.h"
 #include "CameraSetting/OasisCameraSetting_SpringArm.h"
+// From Penguin Assistant Start
+#include "CameraSetting/OasisCameraSetting_LookAt.h"
+// From Penguin Assistant End
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -1323,3 +1326,94 @@ bool UOasisCameraFunctionLibrary::CanRoofCollisionChangeRotationOffset(const UOa
 	return false;
 }
 
+// From Penguin Assistant Start
+void UOasisCameraFunctionLibrary::UpdateView_LookAt(const UOasisCameraProxyBase* InProxy, const FMinimalViewInfo& DefaultCameraView, float DeltaTime, FOasisCameraModeView& InOutView)
+{
+	if (!::IsValid(InProxy))
+	{
+		return;
+	}
+
+	const UOasisCameraSetting_LookAt* TypedSetting = Cast<UOasisCameraSetting_LookAt>(
+		InProxy->GetReadonlySetting(UOasisCameraSettingTypeDictionary::GetLookAtSettingTypeName())
+	);
+	UOasisCameraSettingRuntimeData_LookAt* RuntimeData = Cast<UOasisCameraSettingRuntimeData_LookAt>(
+		UOasisCameraFunctionLibrary::GetSettingRuntimeDataByProxy(InProxy, UOasisCameraSettingTypeDictionary::GetLookAtSettingTypeName())
+	);
+
+	if (!::IsValid(RuntimeData))
+	{
+		return;
+	}
+
+	// Initialize runtime data with setting values
+	if (!RuntimeData->LockTargetPoint.IsSet() && ::IsValid(TypedSetting))
+	{
+		RuntimeData->LockTargetPoint = TypedSetting->DefaultLockTargetPoint;
+	}
+
+	if (::IsValid(TypedSetting))
+	{
+		RuntimeData->bIsLockEnabled = TypedSetting->bEnableLock;
+	}
+
+	// Check if lock is enabled
+	if (!RuntimeData->bIsLockEnabled)
+	{
+		return;
+	}
+
+	// Get lock target point
+	if (!RuntimeData->LockTargetPoint.IsSet())
+	{
+		return;
+	}
+
+	const FVector TargetPoint = RuntimeData->LockTargetPoint.GetValue();
+
+	// Calculate target rotation (direction from camera location to target point)
+	const FVector DirectionToTarget = (TargetPoint - InOutView.Location).GetSafeNormal();
+	const FRotator TargetLookRotation = DirectionToTarget.Rotation();
+
+	// Initialize interpolation speed info if needed
+	if (::IsValid(TypedSetting) && !RuntimeData->TargetRotationInterpolationSpeedInfo.IsSet())
+	{
+		RuntimeData->TargetRotationInterpolationSpeedInfo = FRuntimeOasisCameraInterpolationSpeedInfo(TypedSetting->RotationInterpolation);
+	}
+
+	// Initialize current rotation if needed
+	if (!RuntimeData->CurrentLookRotation.IsSet())
+	{
+		RuntimeData->CurrentLookRotation = InOutView.Rotation;
+	}
+
+	// Interpolate to target rotation
+	FRotator NewRotation = RuntimeData->CurrentLookRotation.GetValue();
+	if (::IsValid(TypedSetting) && RuntimeData->TargetRotationInterpolationSpeedInfo.IsSet())
+	{
+		NewRotation = UOasisCameraFunctionLibrary::InterpolateRotator(
+			RuntimeData->CurrentLookRotation.GetValue(),
+		TargetLookRotation,
+			DeltaTime,
+			RuntimeData->TargetRotationInterpolationSpeedInfo.GetValue()
+		);
+	}
+	else
+	{
+		// No interpolation, set directly
+		NewRotation = TargetLookRotation;
+	}
+
+	// Apply to view
+	InOutView.Rotation = NewRotation;
+	InOutView.ControlRotation = NewRotation;
+	RuntimeData->CurrentLookRotation = NewRotation;
+
+	// Draw debug
+	if (::IsValid(TypedSetting) && TypedSetting->bDrawDebug)
+	{
+		DrawDebugPoint(InProxy->GetWorld(), TargetPoint, 20.0f, FColor::Green);
+		DrawDebugLine(InProxy->GetWorld(), InOutView.Location, TargetPoint, FColor::Green, false, -1.f, 0, 1.0f);
+	}
+}
+// From Penguin Assistant End

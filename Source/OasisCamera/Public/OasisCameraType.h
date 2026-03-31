@@ -250,6 +250,10 @@ public:
 	static FName GetCollisionTestSettingTypeName() { return FName("CollisionTest"); }
 	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetFOVSettingAssetTypeName() { return FName("FOV"); }
+	// From Penguin Assistant Start
+	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	static FName GetLookAtSettingTypeName() { return FName("LookAt"); }
+	// From Penguin Assistant End
 };
 
 UCLASS()
@@ -313,6 +317,10 @@ public:
 	static void UpdateView_LocationLag(const UOasisCameraProxyBase* InProxy, const FMinimalViewInfo& DefaultCameraView, float DeltaTime, UPARAM(ref) FOasisCameraModeView& InOutView);
 	UFUNCTION(BlueprintCallable, Category = "OasisCameraImplement|CameraViewProcessWithProxy")
 	static void UpdateView_CollisionTest(const UOasisCameraProxyBase* InProxy, const FMinimalViewInfo& DefaultCameraView, float DeltaTime, UPARAM(ref) FOasisCameraModeView& InOutView);
+	// From Penguin Assistant Start
+	UFUNCTION(BlueprintCallable, Category = "OasisCameraImplement|CameraViewProcessWithProxy")
+	static void UpdateView_LookAt(const UOasisCameraProxyBase* InProxy, const FMinimalViewInfo& DefaultCameraView, float DeltaTime, UPARAM(ref) FOasisCameraModeView& InOutView);
+	// From Penguin Assistant End
 	UFUNCTION(BlueprintCallable, Category = "OasisCameraImplement|CameraViewProcessWithProxy")
 	static bool CanRoofCollisionChangeRotationOffset(const UOasisCameraProxyBase* InProxy);
 	UFUNCTION(BlueprintCallable, Category = "OasisCameraImplement|CameraViewProcessWithProxy")

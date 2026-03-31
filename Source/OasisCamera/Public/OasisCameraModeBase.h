@@ -231,6 +231,16 @@ public:
 	TObjectPtr<UOasisCameraModeBase> GetTopMode() const;
 	TArray<TObjectPtr<UOasisCameraModeBase>> GetAllActiveMode() const;
 
+	// From Penguin Assistant Start
+	// 允许外部更改 TopMode 的 ProxyState
+	UFUNCTION(BlueprintCallable)
+	void ChangeTopModeProxyState(const FName& InStateName = NAME_None);
+
+	// 允许外部获得 TopMode 指定 SettingName 的 SettingRuntimeData 指针
+	UFUNCTION(BlueprintCallable)
+	class UOasisCameraSettingRuntimeDataBase* GetTopModeSettingRuntimeData(const FName SettingTypeName) const;
+	// From Penguin Assistant End
+
 protected:
 	UFUNCTION()
 	UOasisCameraModeBase* GetCameraModeInstance(TSubclassOf<UOasisCameraModeBase> CameraModeClass);

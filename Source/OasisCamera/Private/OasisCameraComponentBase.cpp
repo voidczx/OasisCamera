@@ -165,3 +165,22 @@ TArray<UOasisCameraModeBase*> UOasisCameraComponentBase::GetAllActiveModes() con
 	}
 	return CameraModeStack->GetAllActiveMode();
 }
+
+// From Penguin Assistant Start
+void UOasisCameraComponentBase::ChangeTopModeProxyState(const FName& InStateName)
+{
+	if (::IsValid(CameraModeStack))
+	{
+		CameraModeStack->ChangeTopModeProxyState(InStateName);
+	}
+}
+
+UOasisCameraSettingRuntimeDataBase* UOasisCameraComponentBase::GetTopModeSettingRuntimeData(const FName SettingTypeName) const
+{
+	if (!::IsValid(CameraModeStack))
+	{
+		return nullptr;
+	}
+	return CameraModeStack->GetTopModeSettingRuntimeData(SettingTypeName);
+}
+// From Penguin Assistant End

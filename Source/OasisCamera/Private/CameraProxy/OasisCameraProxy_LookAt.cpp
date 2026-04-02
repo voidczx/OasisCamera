@@ -2,6 +2,7 @@
 
 // From Penguin Assistant Start
 #include "CameraProxy/OasisCameraProxy_LookAt.h"
+#include "CameraSetting/OasisCameraSetting_LookAt.h"
 
 void UOasisCameraProxy_LookAt::Activate()
 {
@@ -10,7 +11,14 @@ void UOasisCameraProxy_LookAt::Activate()
 
 void UOasisCameraProxy_LookAt::Deactivate()
 {
-
+	UOasisCameraSettingRuntimeData_LookAt* RuntimeData = Cast<UOasisCameraSettingRuntimeData_LookAt>(
+		UOasisCameraFunctionLibrary::GetSettingRuntimeDataByProxy(this, UOasisCameraSettingTypeDictionary::GetLookAtSettingTypeName())
+	);
+	if (::IsValid(RuntimeData))
+	{
+		RuntimeData->TargetRotationInterpolationSpeedInfo.Reset();
+		RuntimeData->CurrentLookRotation.Reset();
+	}
 }
 
 void UOasisCameraProxy_LookAt::UpdateView(const FMinimalViewInfo& DefaultCameraView, float DeltaTime, FOasisCameraModeView& InOutView)

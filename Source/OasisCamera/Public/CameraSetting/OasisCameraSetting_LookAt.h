@@ -14,7 +14,7 @@ class UOasisCameraSettingRuntimeData_LookAt : public UOasisCameraSettingRuntimeD
 
 public:
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	bool TryGetLockTargetPoint(FVector& OutVector) const
 	{
 		if (LockTargetPoint.IsSet())
@@ -31,7 +31,7 @@ public:
 		LockTargetPoint = InTargetPoint;
 	}
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	bool IsLockEnabled() const
 	{
 		return bIsLockEnabled;

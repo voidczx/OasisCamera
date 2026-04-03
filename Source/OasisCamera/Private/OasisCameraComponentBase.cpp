@@ -167,7 +167,7 @@ TArray<UOasisCameraModeBase*> UOasisCameraComponentBase::GetAllActiveModes() con
 }
 
 // From Penguin Assistant Start
-void UOasisCameraComponentBase::ChangeTopModeProxyState(const FName& InStateName)
+void UOasisCameraComponentBase::ChangeTopModeProxyState(const FName InStateName)
 {
 	if (::IsValid(CameraModeStack))
 	{

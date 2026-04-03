@@ -46,37 +46,37 @@ public:
 	// Gets the tag associated with the top layer and the blend weight of it
 	void GetBlendInfo(float& OutWeightOfTopLayer, FGameplayTag& OutTagOfTopLayer) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	bool TryGetOldControlRotation(FRotator& OutRotator) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	bool TryGetOldRotation(FRotator& OutRotator) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	bool TryGetOldLocation(FVector& OutLocation) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	bool TryGetOldFOV(float& OutFOV) const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	bool IsStackActive() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	bool IsStackEmpty() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	UOasisCameraModeBase* GetTopMode() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	TArray<UOasisCameraModeBase*> GetAllActiveModes() const;
 
 	// From Penguin Assistant Start
 	// 允许外部更改 TopMode 的 ProxyState
 	UFUNCTION(BlueprintCallable)
-	void ChangeTopModeProxyState(const FName& InStateName = NAME_None);
+	void ChangeTopModeProxyState(const FName InStateName = NAME_None);
 
 	// 允许外部获得 TopMode 指定 SettingName 的 SettingRuntimeData 指针
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	class UOasisCameraSettingRuntimeDataBase* GetTopModeSettingRuntimeData(const FName SettingTypeName) const;
 	// From Penguin Assistant End
 

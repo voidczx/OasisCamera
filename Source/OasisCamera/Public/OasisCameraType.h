@@ -114,9 +114,9 @@ public:
 	virtual void Deactivate() {}
 	virtual void UpdateView(const FMinimalViewInfo& DefaultCameraView, float DeltaTime, FOasisCameraModeView& InOutView) {}
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	virtual const UOasisCameraSettingBase* GetReadonlySetting(const FName SettingType) const;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	virtual UOasisCameraSettingRuntimeDataBase* GetSettingRuntimeData(const FName SettingType) const;
 
 };
@@ -230,28 +230,28 @@ class OASISCAMERA_API UOasisCameraSettingTypeDictionary : public UBlueprintFunct
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetBasicRotationOffsetSettingTypeName() { return FName("RotationOffset"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetRoofCollisionChangeRotationOffsetSettingTypeName() { return FName("RoofCollisionChangeRotationOffset"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetFallingChangeRotationOffsetSettingTypeName() { return FName("FallingChangeRotationOffset"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetFollowActorRotationSettingTypeName() { return FName("FollowActorRotation"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetBasicRotationLimitSettingTypeName() { return FName("BasicRotationLimit"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetRotationLagSettingTypeName() { return FName("RotationLag"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetSpringArmSettingTypeName() { return FName("SpringArm"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetLocationLagSettingTypeName() { return FName("LocationLag"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetCollisionTestSettingTypeName() { return FName("CollisionTest"); }
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetFOVSettingAssetTypeName() { return FName("FOV"); }
 	// From Penguin Assistant Start
-	UFUNCTION(BlueprintCallable, Category = "OasisCameraSettingTypeDictionary")
+	UFUNCTION(BlueprintPure, Category = "OasisCameraSettingTypeDictionary")
 	static FName GetLookAtSettingTypeName() { return FName("LookAt"); }
 	// From Penguin Assistant End
 };

@@ -1373,7 +1373,9 @@ void UOasisCameraFunctionLibrary::UpdateView_LookAt(const UOasisCameraProxyBase*
 
 	// Calculate target rotation (direction from camera location to target point)
 	const FVector DirectionToTarget = (TargetPoint - InOutView.Location).GetSafeNormal();
-	const FRotator TargetLookRotation = DirectionToTarget.Rotation();
+	FRotator TargetLookRotation = DirectionToTarget.Rotation();
+	TargetLookRotation.Roll = 0.f;
+	TargetLookRotation.Normalize();
 
 	// Initialize interpolation speed info if needed
 	if (::IsValid(TypedSetting) && !RuntimeData->TargetRotationInterpolationSpeedInfo.IsSet())
@@ -1384,19 +1386,28 @@ void UOasisCameraFunctionLibrary::UpdateView_LookAt(const UOasisCameraProxyBase*
 	// Initialize current rotation if needed
 	if (!RuntimeData->CurrentLookRotation.IsSet())
 	{
-		RuntimeData->CurrentLookRotation = InOutView.Rotation;
+		FRotator InitialLookRotation = InOutView.Rotation;
+		InitialLookRotation.Roll = 0.f;
+		InitialLookRotation.Normalize();
+		RuntimeData->CurrentLookRotation = InitialLookRotation;
 	}
 
 	// Interpolate to target rotation
-	FRotator NewRotation = RuntimeData->CurrentLookRotation.GetValue();
+	FRotator CurrentLookRotation = RuntimeData->CurrentLookRotation.GetValue();
+	CurrentLookRotation.Roll = 0.f;
+	CurrentLookRotation.Normalize();
+
+	FRotator NewRotation = CurrentLookRotation;
 	if (::IsValid(TypedSetting) && RuntimeData->TargetRotationInterpolationSpeedInfo.IsSet())
 	{
 		NewRotation = UOasisCameraFunctionLibrary::InterpolateRotator(
-			RuntimeData->CurrentLookRotation.GetValue(),
-		TargetLookRotation,
+			CurrentLookRotation,
+			TargetLookRotation,
 			DeltaTime,
 			RuntimeData->TargetRotationInterpolationSpeedInfo.GetValue()
 		);
+		NewRotation.Roll = 0.f;
+		NewRotation.Normalize();
 	}
 	else
 	{

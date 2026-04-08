@@ -143,42 +143,58 @@ void UOasisCameraModeBase::TryCreateProxyByClass(TSubclassOf<UOasisCameraProxyBa
 
 void UOasisCameraModeBase::TryAddDynamicSetting(UOasisCameraSettingBase* InDynamicSetting)
 {
+	// From Penguin Assistant Start
 	if (!::IsValid(InDynamicSetting))
 	{
 		return;
 	}
 	const FName SettingTypeName = InDynamicSetting->GetAssetTypeName();
-	if (CachedModeSettings.Contains(SettingTypeName))
+	FOasisResolvedCameraSettingsSlot& ResolvedSetting = ResolvedSettingsByType.FindOrAdd(SettingTypeName);
+	if (ResolvedSetting.DynamicSetting == InDynamicSetting && ResolvedSetting.RuntimeData != nullptr)
 	{
 		return;
 	}
-	DynamicModeSettings.Emplace(SettingTypeName, InDynamicSetting);
-	CachedModeSettings.Emplace(SettingTypeName, InDynamicSetting);
-	TSubclassOf<UOasisCameraSettingRuntimeDataBase> RuntimeDataClass = InDynamicSetting->GetRuntimeDataClass();
-	if (RuntimeDataClass)
-	{
-		SettingRuntimeDataMap.Emplace(SettingTypeName, NewObject<UOasisCameraSettingRuntimeDataBase>(this, RuntimeDataClass));
-	}
+	UOasisCameraSettingBase* PreviousEffectiveSetting = ResolvedSetting.GetMutableEffectiveSetting();
+	ResolvedSetting.DynamicSetting = InDynamicSetting;
+	RefreshRuntimeDataForResolvedSetting(ResolvedSetting);
+	NotifyProxyDynamicSettingChanged(SettingTypeName, PreviousEffectiveSetting, ResolvedSetting.GetMutableEffectiveSetting(), ResolvedSetting.RuntimeData.Get());
+	// From Penguin Assistant End
 }
 
 void UOasisCameraModeBase::TryRemoveDynamicSetting(FName SettingTypeName)
 {
-	if (DynamicModeSettings.Remove(SettingTypeName) <= 0)
+	// From Penguin Assistant Start
+	FOasisResolvedCameraSettingsSlot* ResolvedSetting = ResolvedSettingsByType.Find(SettingTypeName);
+	if (ResolvedSetting == nullptr || ResolvedSetting->DynamicSetting == nullptr)
 	{
 		return;
 	}
-	CachedModeSettings.Remove(SettingTypeName);
-	SettingRuntimeDataMap.Remove(SettingTypeName);
+	UOasisCameraSettingBase* PreviousEffectiveSetting = ResolvedSetting->GetMutableEffectiveSetting();
+	UOasisCameraSettingRuntimeDataBase* RuntimeData = ResolvedSetting->RuntimeData.Get();
+	ResolvedSetting->DynamicSetting = nullptr;
+	if (ResolvedSetting->HasAnySetting())
+	{
+		RefreshRuntimeDataForResolvedSetting(*ResolvedSetting);
+		NotifyProxyDynamicSettingChanged(SettingTypeName, PreviousEffectiveSetting, ResolvedSetting->GetMutableEffectiveSetting(), ResolvedSetting->RuntimeData.Get());
+	}
+	else
+	{
+		NotifyProxyDynamicSettingChanged(SettingTypeName, PreviousEffectiveSetting, nullptr, RuntimeData);
+		ResolvedSettingsByType.Remove(SettingTypeName);
+	}
+	// From Penguin Assistant End
 }
 
 UOasisCameraSettingRuntimeDataBase* UOasisCameraModeBase::GetSettingRuntimeData(const FName SettingTypeName) const
 {
-	const TObjectPtr<UOasisCameraSettingRuntimeDataBase>* RuntimeData = SettingRuntimeDataMap.Find(SettingTypeName);
-	if (RuntimeData == nullptr)
+	// From Penguin Assistant Start
+	const FOasisResolvedCameraSettingsSlot* ResolvedSetting = ResolvedSettingsByType.Find(SettingTypeName);
+	if (ResolvedSetting == nullptr)
 	{
 		return nullptr;
 	}
-	return (*RuntimeData).Get();
+	return ResolvedSetting->RuntimeData.Get();
+	// From Penguin Assistant End
 }
 
 FVector UOasisCameraModeBase::GetPivotLocation() const
@@ -209,12 +225,14 @@ FRotator UOasisCameraModeBase::GetPivotRotation() const
 
 const UOasisCameraSettingBase* UOasisCameraModeBase::GetReadOnlySetting(const FName& InSettingType) const
 {
-	const TWeakObjectPtr<UOasisCameraSettingBase>* SettingPtr = CachedModeSettings.Find(InSettingType);
-	if (SettingPtr != nullptr && (*SettingPtr).IsValid())
+	// From Penguin Assistant Start
+	const FOasisResolvedCameraSettingsSlot* ResolvedSetting = ResolvedSettingsByType.Find(InSettingType);
+	if (ResolvedSetting != nullptr)
 	{
-		return (*SettingPtr).Get();
+		return ResolvedSetting->GetEffectiveSetting();
 	}
 	return nullptr;
+	// From Penguin Assistant End
 }
 
 void UOasisCameraModeBase::UpdateCameraMode(const FMinimalViewInfo& DefaultCameraView, float DeltaTime)
@@ -324,12 +342,45 @@ void UOasisCameraModeBase::DrawDebug(UCanvas* Canvas) const
 	DisplayDebugManager.DrawString(FString::Printf(TEXT("      OasisCameraMode: %s (%f)"), *GetName(), BlendWeight));
 }
 
+// From Penguin Assistant Start
+void UOasisCameraModeBase::NotifyProxyDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* PreviousSetting, const UOasisCameraSettingBase* CurrentSetting, UOasisCameraSettingRuntimeDataBase* RuntimeData)
+{
+	for (UOasisCameraProxyBase* Proxy : ProxyInstances)
+	{
+		if (::IsValid(Proxy))
+		{
+			Proxy->OnDynamicSettingChanged(SettingTypeName, PreviousSetting, CurrentSetting, RuntimeData);
+		}
+	}
+}
+
+void UOasisCameraModeBase::RefreshRuntimeDataForResolvedSetting(FOasisResolvedCameraSettingsSlot& InOutResolvedSetting)
+{
+	if (UOasisCameraSettingBase* EffectiveSetting = InOutResolvedSetting.GetMutableEffectiveSetting())
+	{
+		TSubclassOf<UOasisCameraSettingRuntimeDataBase> RuntimeDataClass = EffectiveSetting->GetRuntimeDataClass();
+		if (RuntimeDataClass)
+		{
+			if (!::IsValid(InOutResolvedSetting.RuntimeData) || InOutResolvedSetting.RuntimeData->GetClass() != RuntimeDataClass)
+			{
+				InOutResolvedSetting.RuntimeData = NewObject<UOasisCameraSettingRuntimeDataBase>(this, RuntimeDataClass);
+			}
+		}
+		else
+		{
+			InOutResolvedSetting.RuntimeData = nullptr;
+		}
+	}
+}
+// From Penguin Assistant End
+
 void UOasisCameraModeBase::InternalOnCreate()
 {
 	CachedProxyInstances.Empty();
 	ProxyInstances.Empty();
-	CachedModeSettings.Empty();
-	SettingRuntimeDataMap.Empty();
+	// From Penguin Assistant Start
+	ResolvedSettingsByType.Empty();
+	// From Penguin Assistant End
 	// for (UOasisCameraSettingBase* Setting : ModeSettings)
 	// {
 	// 	if (::IsValid(Setting))
@@ -337,19 +388,24 @@ void UOasisCameraModeBase::InternalOnCreate()
 	// 		CachedModeSettings.Emplace(Setting->GetPrimaryAssetId().PrimaryAssetType.GetName(), Setting);
 	// 	}
 	// }
+	// From Penguin Assistant Start
 	for (UOasisCameraSettingBase* InstancedSetting : InstancedModeSettings)
 	{
-		if (::IsValid(InstancedSetting) && !CachedModeSettings.Contains(InstancedSetting->GetPrimaryAssetId().PrimaryAssetType.GetName()))
+		if (::IsValid(InstancedSetting))
 		{
-			CachedModeSettings.Emplace(InstancedSetting->GetPrimaryAssetId().PrimaryAssetType.GetName(), InstancedSetting);
-			if (InstancedSetting->GetRuntimeDataClass())
+			const FName SettingTypeName = InstancedSetting->GetAssetTypeName();
+			FOasisResolvedCameraSettingsSlot& ResolvedSetting = ResolvedSettingsByType.FindOrAdd(SettingTypeName);
+			if (ResolvedSetting.StaticSetting == nullptr)
 			{
-				SettingRuntimeDataMap.Emplace(
-				InstancedSetting->GetPrimaryAssetId().PrimaryAssetType.GetName(),
-				NewObject<UOasisCameraSettingRuntimeDataBase>(this, InstancedSetting->GetRuntimeDataClass()));
+				ResolvedSetting.StaticSetting = InstancedSetting;
 			}
 		}
 	}
+	for (TPair<FName, FOasisResolvedCameraSettingsSlot>& Pair : ResolvedSettingsByType)
+	{
+		RefreshRuntimeDataForResolvedSetting(Pair.Value);
+	}
+	// From Penguin Assistant End
 	ChangeProxyState();
 }
 

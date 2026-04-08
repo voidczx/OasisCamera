@@ -113,6 +113,9 @@ public:
 	virtual void Activate() {}
 	virtual void Deactivate() {}
 	virtual void UpdateView(const FMinimalViewInfo& DefaultCameraView, float DeltaTime, FOasisCameraModeView& InOutView) {}
+	// From Penguin Assistant Start
+	virtual void OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* PreviousSetting, const UOasisCameraSettingBase* CurrentSetting, UOasisCameraSettingRuntimeDataBase* RuntimeData) {}
+	// From Penguin Assistant End
 
 	UFUNCTION(BlueprintPure)
 	virtual const UOasisCameraSettingBase* GetReadonlySetting(const FName SettingType) const;

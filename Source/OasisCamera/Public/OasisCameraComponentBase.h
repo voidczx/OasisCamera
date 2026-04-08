@@ -78,6 +78,14 @@ public:
 	// 允许外部获得 TopMode 指定 SettingName 的 SettingRuntimeData 指针
 	UFUNCTION(BlueprintPure)
 	class UOasisCameraSettingRuntimeDataBase* GetTopModeSettingRuntimeData(const FName SettingTypeName) const;
+
+	// 允许外部为 TopMode 增加 DynamicSetting
+	UFUNCTION(BlueprintCallable)
+	void TryAddTopModeDynamicSetting(class UOasisCameraSettingBase* InDynamicSetting);
+
+	// 允许外部从 TopMode 移除 DynamicSetting
+	UFUNCTION(BlueprintCallable)
+	void TryRemoveTopModeDynamicSetting(const FName SettingTypeName);
 	// From Penguin Assistant End
 
 protected:

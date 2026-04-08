@@ -15,6 +15,9 @@ public:
 
 	virtual void Activate() override;
 	virtual void Deactivate() override;
+	// From Penguin Assistant Start
+	virtual void OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* PreviousSetting, const UOasisCameraSettingBase* CurrentSetting, UOasisCameraSettingRuntimeDataBase* RuntimeData) override;
+	// From Penguin Assistant End
 	virtual void UpdateView(const FMinimalViewInfo& DefaultCameraView, float DeltaTime, FOasisCameraModeView& InOutView) override;
 
 };

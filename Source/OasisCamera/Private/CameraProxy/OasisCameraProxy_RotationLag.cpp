@@ -24,6 +24,20 @@ void UOasisCameraProxy_RotationLag::Deactivate()
 	// From Penguin Assistant End
 }
 
+// From Penguin Assistant Start
+void UOasisCameraProxy_RotationLag::OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* /*PreviousSetting*/, const UOasisCameraSettingBase* /*CurrentSetting*/, UOasisCameraSettingRuntimeDataBase* RuntimeData)
+{
+	if (SettingTypeName != UOasisCameraSettingTypeDictionary::GetRotationLagSettingTypeName())
+	{
+		return;
+	}
+	if (UOasisCameraSettingRuntimeData_RotationLag* TypedRuntimeData = Cast<UOasisCameraSettingRuntimeData_RotationLag>(RuntimeData))
+	{
+		TypedRuntimeData->OldRotator.Reset();
+	}
+}
+// From Penguin Assistant End
+
 void UOasisCameraProxy_RotationLag::UpdateView(const FMinimalViewInfo& DefaultCameraView, float DeltaTime, FOasisCameraModeView& InOutView)
 {
 	UOasisCameraFunctionLibrary::UpdateView_RotationLag(this, DefaultCameraView, DeltaTime, InOutView);

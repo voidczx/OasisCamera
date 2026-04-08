@@ -21,6 +21,19 @@ void UOasisCameraProxy_LookAt::Deactivate()
 	}
 }
 
+void UOasisCameraProxy_LookAt::OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* /*PreviousSetting*/, const UOasisCameraSettingBase* /*CurrentSetting*/, UOasisCameraSettingRuntimeDataBase* RuntimeData)
+{
+	if (SettingTypeName != UOasisCameraSettingTypeDictionary::GetLookAtSettingTypeName())
+	{
+		return;
+	}
+	if (UOasisCameraSettingRuntimeData_LookAt* TypedRuntimeData = Cast<UOasisCameraSettingRuntimeData_LookAt>(RuntimeData))
+	{
+		TypedRuntimeData->TargetRotationInterpolationSpeedInfo.Reset();
+		TypedRuntimeData->CurrentLookRotation.Reset();
+	}
+}
+
 void UOasisCameraProxy_LookAt::UpdateView(const FMinimalViewInfo& DefaultCameraView, float DeltaTime, FOasisCameraModeView& InOutView)
 {
 	UOasisCameraFunctionLibrary::UpdateView_LookAt(this, DefaultCameraView, DeltaTime, InOutView);

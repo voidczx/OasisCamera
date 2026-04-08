@@ -183,4 +183,20 @@ UOasisCameraSettingRuntimeDataBase* UOasisCameraComponentBase::GetTopModeSetting
 	}
 	return CameraModeStack->GetTopModeSettingRuntimeData(SettingTypeName);
 }
+
+void UOasisCameraComponentBase::TryAddTopModeDynamicSetting(UOasisCameraSettingBase* InDynamicSetting)
+{
+	if (UOasisCameraModeBase* TopMode = GetTopMode())
+	{
+		TopMode->TryAddDynamicSetting(InDynamicSetting);
+	}
+}
+
+void UOasisCameraComponentBase::TryRemoveTopModeDynamicSetting(const FName SettingTypeName)
+{
+	if (UOasisCameraModeBase* TopMode = GetTopMode())
+	{
+		TopMode->TryRemoveDynamicSetting(SettingTypeName);
+	}
+}
 // From Penguin Assistant End

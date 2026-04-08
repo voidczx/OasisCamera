@@ -36,6 +36,39 @@ enum class EOasisCameraModeBlendFunction : uint8
 	COUNT UMETA(Hidden)
 };
 
+// From Penguin Assistant Start
+USTRUCT()
+struct FOasisResolvedCameraSettingsSlot
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(Transient)
+	TObjectPtr<UOasisCameraSettingBase> StaticSetting = nullptr;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UOasisCameraSettingBase> DynamicSetting = nullptr;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UOasisCameraSettingRuntimeDataBase> RuntimeData = nullptr;
+
+	const UOasisCameraSettingBase* GetEffectiveSetting() const
+	{
+		return DynamicSetting ? DynamicSetting.Get() : StaticSetting.Get();
+	}
+
+	UOasisCameraSettingBase* GetMutableEffectiveSetting()
+	{
+		return DynamicSetting ? DynamicSetting.Get() : StaticSetting.Get();
+	}
+
+	bool HasAnySetting() const
+	{
+		return StaticSetting != nullptr || DynamicSetting != nullptr;
+	}
+};
+// From Penguin Assistant End
+
 /**
  * UOasisCameraModeBase
  *
@@ -179,14 +212,10 @@ protected:
 	UPROPERTY(Transient)
 	TMap<TObjectPtr<UClass>, TObjectPtr<UOasisCameraProxyBase>> CachedProxyInstances;
 
+	// From Penguin Assistant Start
 	UPROPERTY(Transient)
-	TMap<FName, TObjectPtr<UOasisCameraSettingBase>> DynamicModeSettings;
-
-	UPROPERTY(Transient)
-	TMap<FName, TWeakObjectPtr<UOasisCameraSettingBase>> CachedModeSettings;
-
-	UPROPERTY(Transient)
-	TMap<FName, TObjectPtr<UOasisCameraSettingRuntimeDataBase>> SettingRuntimeDataMap;
+	TMap<FName, FOasisResolvedCameraSettingsSlot> ResolvedSettingsByType;
+	// From Penguin Assistant End
 
 	UPROPERTY(Transient)
 	bool bActive = false;
@@ -195,6 +224,11 @@ protected:
 	FName CurrentProxyState = NAME_None;
 
 private:
+
+	// From Penguin Assistant Start
+	void NotifyProxyDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* PreviousSetting, const UOasisCameraSettingBase* CurrentSetting, UOasisCameraSettingRuntimeDataBase* RuntimeData);
+	void RefreshRuntimeDataForResolvedSetting(FOasisResolvedCameraSettingsSlot& InOutResolvedSetting);
+	// From Penguin Assistant End
 
 	void InternalOnCreate();
 };

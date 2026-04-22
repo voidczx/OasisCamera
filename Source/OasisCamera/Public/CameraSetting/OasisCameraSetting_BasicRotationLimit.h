@@ -13,6 +13,30 @@ class UOasisCameraSettingRuntimeData_BasicRotationLimit : public UOasisCameraSet
 
 public:
 
+	// From Penguin Assistant Start
+	virtual void ClearRuntimeInterpolationData() override
+	{
+		BasicRotationLimitInterpolationSpeedInfo.Reset();
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetBasicRotationLimitInterpolationSpeedInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (BasicRotationLimitInterpolationSpeedInfo.IsSet())
+		{
+			OutValue = BasicRotationLimitInterpolationSpeedInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetBasicRotationLimitInterpolationSpeedInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		BasicRotationLimitInterpolationSpeedInfo = InValue;
+	}
+	// From Penguin Assistant End
+
 	TOptional<FRuntimeOasisCameraInterpolationSpeedInfo> BasicRotationLimitInterpolationSpeedInfo;
 
 };

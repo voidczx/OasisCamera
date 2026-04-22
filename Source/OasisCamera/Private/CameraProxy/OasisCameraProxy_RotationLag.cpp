@@ -1,4 +1,4 @@
-﻿// Copyright Beijing Bytedance Technology Co., Ltd. All Right Reserved.
+// Copyright Beijing Bytedance Technology Co., Ltd. All Right Reserved.
 
 #include "CameraProxy/OasisCameraProxy_RotationLag.h"
 
@@ -25,8 +25,9 @@ void UOasisCameraProxy_RotationLag::Deactivate()
 }
 
 // From Penguin Assistant Start
-void UOasisCameraProxy_RotationLag::OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* /*PreviousSetting*/, const UOasisCameraSettingBase* /*CurrentSetting*/, UOasisCameraSettingRuntimeDataBase* RuntimeData)
+void UOasisCameraProxy_RotationLag::OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* PreviousSetting, const UOasisCameraSettingBase* CurrentSetting, UOasisCameraSettingRuntimeDataBase* RuntimeData)
 {
+	Super::OnDynamicSettingChanged(SettingTypeName, PreviousSetting, CurrentSetting, RuntimeData);
 	if (SettingTypeName != UOasisCameraSettingTypeDictionary::GetRotationLagSettingTypeName())
 	{
 		return;

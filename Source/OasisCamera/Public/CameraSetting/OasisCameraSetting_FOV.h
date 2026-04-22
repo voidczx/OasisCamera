@@ -12,6 +12,47 @@ class UOasisCameraSettingRuntimeData_FOV : public UOasisCameraSettingRuntimeData
 	GENERATED_BODY()
 public:
 
+	// From Penguin Assistant Start
+	virtual void ClearRuntimeInterpolationData() override
+	{
+		RuntimeFOVInterpolateInfo.Reset();
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldFOV(float& OutValue) const
+	{
+		if (OldFOV.IsSet())
+		{
+			OutValue = OldFOV.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldFOV(float InValue)
+	{
+		OldFOV = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetRuntimeFOVInterpolateInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (RuntimeFOVInterpolateInfo.IsSet())
+		{
+			OutValue = RuntimeFOVInterpolateInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetRuntimeFOVInterpolateInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		RuntimeFOVInterpolateInfo = InValue;
+	}
+	// From Penguin Assistant End
+
 	TOptional<float> OldFOV;
 	TOptional<FRuntimeOasisCameraInterpolationSpeedInfo> RuntimeFOVInterpolateInfo;
 

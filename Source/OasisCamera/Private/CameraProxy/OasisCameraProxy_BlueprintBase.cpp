@@ -15,6 +15,7 @@ void UOasisCameraProxy_BlueprintBase::Deactivate()
 // From Penguin Assistant Start
 void UOasisCameraProxy_BlueprintBase::OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* PreviousSetting, const UOasisCameraSettingBase* CurrentSetting, UOasisCameraSettingRuntimeDataBase* RuntimeData)
 {
+	Super::OnDynamicSettingChanged(SettingTypeName, PreviousSetting, CurrentSetting, RuntimeData);
 	ReceiveDynamicSettingChanged(
 		SettingTypeName,
 		const_cast<UOasisCameraSettingBase*>(PreviousSetting),

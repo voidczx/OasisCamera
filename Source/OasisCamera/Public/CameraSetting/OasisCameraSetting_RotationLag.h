@@ -12,6 +12,25 @@ class UOasisCameraSettingRuntimeData_RotationLag : public UOasisCameraSettingRun
 	GENERATED_BODY()
 public:
 
+	// From Penguin Assistant Start
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldRotator(FRotator& OutValue) const
+	{
+		if (OldRotator.IsSet())
+		{
+			OutValue = OldRotator.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldRotator(const FRotator& InValue)
+	{
+		OldRotator = InValue;
+	}
+	// From Penguin Assistant End
+
 	TOptional<FRotator> OldRotator;
 
 };

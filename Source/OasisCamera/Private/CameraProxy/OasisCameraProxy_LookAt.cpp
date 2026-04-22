@@ -21,15 +21,15 @@ void UOasisCameraProxy_LookAt::Deactivate()
 	}
 }
 
-void UOasisCameraProxy_LookAt::OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* /*PreviousSetting*/, const UOasisCameraSettingBase* /*CurrentSetting*/, UOasisCameraSettingRuntimeDataBase* RuntimeData)
+void UOasisCameraProxy_LookAt::OnDynamicSettingChanged(const FName& SettingTypeName, const UOasisCameraSettingBase* PreviousSetting, const UOasisCameraSettingBase* CurrentSetting, UOasisCameraSettingRuntimeDataBase* RuntimeData)
 {
+	Super::OnDynamicSettingChanged(SettingTypeName, PreviousSetting, CurrentSetting, RuntimeData);
 	if (SettingTypeName != UOasisCameraSettingTypeDictionary::GetLookAtSettingTypeName())
 	{
 		return;
 	}
 	if (UOasisCameraSettingRuntimeData_LookAt* TypedRuntimeData = Cast<UOasisCameraSettingRuntimeData_LookAt>(RuntimeData))
 	{
-		TypedRuntimeData->TargetRotationInterpolationSpeedInfo.Reset();
 		TypedRuntimeData->CurrentLookRotation.Reset();
 	}
 }

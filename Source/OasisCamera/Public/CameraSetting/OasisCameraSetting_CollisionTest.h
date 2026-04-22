@@ -12,6 +12,167 @@ class UOasisCameraSettingRuntimeData_CollisionTest : public UOasisCameraSettingR
 	GENERATED_BODY()
 public:
 
+	// From Penguin Assistant Start
+	virtual void ClearRuntimeInterpolationData() override
+	{
+		CollisionCorrectionInterpolationSpeedInfo.Reset();
+		RecoverCollisionAffectedDistanceInterpolationSpeedInfo.Reset();
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetCollisionCorrectionInterpolationSpeedInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (CollisionCorrectionInterpolationSpeedInfo.IsSet())
+		{
+			OutValue = CollisionCorrectionInterpolationSpeedInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetCollisionCorrectionInterpolationSpeedInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		CollisionCorrectionInterpolationSpeedInfo = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetRecoverCollisionAffectedDistanceInterpolationSpeedInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (RecoverCollisionAffectedDistanceInterpolationSpeedInfo.IsSet())
+		{
+			OutValue = RecoverCollisionAffectedDistanceInterpolationSpeedInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetRecoverCollisionAffectedDistanceInterpolationSpeedInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		RecoverCollisionAffectedDistanceInterpolationSpeedInfo = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetCanRecoverCollisionAffectedDistanceAccumulateTime(float& OutValue) const
+	{
+		if (CanRecoverCollisionAffectedDistanceAccumulateTime.IsSet())
+		{
+			OutValue = CanRecoverCollisionAffectedDistanceAccumulateTime.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetCanRecoverCollisionAffectedDistanceAccumulateTime(float InValue)
+	{
+		CanRecoverCollisionAffectedDistanceAccumulateTime = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldCollisionCorrectionPosition(FVector& OutValue) const
+	{
+		if (OldCollisionCorrectionPosition.IsSet())
+		{
+			OutValue = OldCollisionCorrectionPosition.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldCollisionCorrectionPosition(const FVector& InValue)
+	{
+		OldCollisionCorrectionPosition = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetTargetCollisionCorrectionPosition(FVector& OutValue) const
+	{
+		if (TargetCollisionCorrectionPosition.IsSet())
+		{
+			OutValue = TargetCollisionCorrectionPosition.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetTargetCollisionCorrectionPosition(const FVector& InValue)
+	{
+		TargetCollisionCorrectionPosition = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetRelativeTargetCollisionCorrectionPosition(FVector& OutValue) const
+	{
+		if (RelativeTargetCollisionCorrectionPosition.IsSet())
+		{
+			OutValue = RelativeTargetCollisionCorrectionPosition.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetRelativeTargetCollisionCorrectionPosition(const FVector& InValue)
+	{
+		RelativeTargetCollisionCorrectionPosition = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetRelativeOldCollisionCorrectionPosition(FVector& OutValue) const
+	{
+		if (RelativeOldCollisionCorrectionPosition.IsSet())
+		{
+			OutValue = RelativeOldCollisionCorrectionPosition.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetRelativeOldCollisionCorrectionPosition(const FVector& InValue)
+	{
+		RelativeOldCollisionCorrectionPosition = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetCollisionAffectedDistance(float& OutValue) const
+	{
+		if (CollisionAffectedDistance.IsSet())
+		{
+			OutValue = CollisionAffectedDistance.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetCollisionAffectedDistance(float InValue)
+	{
+		CollisionAffectedDistance = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldCollisionTraceDistance(float& OutValue) const
+	{
+		if (OldCollisionTraceDistance.IsSet())
+		{
+			OutValue = OldCollisionTraceDistance.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldCollisionTraceDistance(float InValue)
+	{
+		OldCollisionTraceDistance = InValue;
+	}
+	// From Penguin Assistant End
+
 	TOptional<FRuntimeOasisCameraInterpolationSpeedInfo> CollisionCorrectionInterpolationSpeedInfo;
 	TOptional<FRuntimeOasisCameraInterpolationSpeedInfo> RecoverCollisionAffectedDistanceInterpolationSpeedInfo;
 	TOptional<float> CanRecoverCollisionAffectedDistanceAccumulateTime;

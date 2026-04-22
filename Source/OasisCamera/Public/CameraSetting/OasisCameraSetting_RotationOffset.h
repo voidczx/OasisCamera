@@ -12,6 +12,47 @@ class UOasisCameraSettingRuntimeData_RotationOffset : public UOasisCameraSetting
 
 public:
 
+	// From Penguin Assistant Start
+	virtual void ClearRuntimeInterpolationData() override
+	{
+		ApplyRotationOffsetInterpolationSpeedInfo.Reset();
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetApplyRotationOffsetInterpolationSpeedInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (ApplyRotationOffsetInterpolationSpeedInfo.IsSet())
+		{
+			OutValue = ApplyRotationOffsetInterpolationSpeedInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetApplyRotationOffsetInterpolationSpeedInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		ApplyRotationOffsetInterpolationSpeedInfo = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetCanApplyRotationOffsetAccumulateTime(float& OutValue) const
+	{
+		if (CanApplyRotationOffsetAccumulateTime.IsSet())
+		{
+			OutValue = CanApplyRotationOffsetAccumulateTime.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetCanApplyRotationOffsetAccumulateTime(float InValue)
+	{
+		CanApplyRotationOffsetAccumulateTime = InValue;
+	}
+	// From Penguin Assistant End
+
 	TOptional<FRuntimeOasisCameraInterpolationSpeedInfo> ApplyRotationOffsetInterpolationSpeedInfo;
 	TOptional<float> CanApplyRotationOffsetAccumulateTime;
 

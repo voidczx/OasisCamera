@@ -13,6 +13,196 @@ class UOasisCameraSettingRuntimeData_SpringArm : public UOasisCameraSettingRunti
 	GENERATED_BODY()
 public:
 
+	// From Penguin Assistant Start
+	virtual void ClearRuntimeInterpolationData() override
+	{
+		SpringArmStartOffsetInterpolationSpeedInfo.Reset();
+		SpringArmEndOffsetInterpolationSpeedInfo.Reset();
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetTargetDistance(float& OutValue) const
+	{
+		if (TargetDistance.IsSet())
+		{
+			OutValue = TargetDistance.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetTargetDistance(float InValue)
+	{
+		TargetDistance = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldDistance(float& OutValue) const
+	{
+		if (OldDistance.IsSet())
+		{
+			OutValue = OldDistance.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldDistance(float InValue)
+	{
+		OldDistance = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldSpringArmStartOffset(FVector& OutValue) const
+	{
+		if (OldSpringArmStartOffset.IsSet())
+		{
+			OutValue = OldSpringArmStartOffset.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldSpringArmStartOffset(const FVector& InValue)
+	{
+		OldSpringArmStartOffset = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldSpringArmStartPosition(FVector& OutValue) const
+	{
+		if (OldSpringArmStartPosition.IsSet())
+		{
+			OutValue = OldSpringArmStartPosition.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldSpringArmStartPosition(const FVector& InValue)
+	{
+		OldSpringArmStartPosition = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetTargetSpringArmStartPosition(FVector& OutValue) const
+	{
+		if (TargetSpringArmStartPosition.IsSet())
+		{
+			OutValue = TargetSpringArmStartPosition.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetTargetSpringArmStartPosition(const FVector& InValue)
+	{
+		TargetSpringArmStartPosition = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldSpringArmEndOffset(FVector& OutValue) const
+	{
+		if (OldSpringArmEndOffset.IsSet())
+		{
+			OutValue = OldSpringArmEndOffset.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldSpringArmEndOffset(const FVector& InValue)
+	{
+		OldSpringArmEndOffset = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetTargetSpringArmEndOffset(FVector& OutValue) const
+	{
+		if (TargetSpringArmEndOffset.IsSet())
+		{
+			OutValue = TargetSpringArmEndOffset.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetTargetSpringArmEndOffset(const FVector& InValue)
+	{
+		TargetSpringArmEndOffset = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldSpringArmEndPosition(FVector& OutValue) const
+	{
+		if (OldSpringArmEndPosition.IsSet())
+		{
+			OutValue = OldSpringArmEndPosition.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldSpringArmEndPosition(const FVector& InValue)
+	{
+		OldSpringArmEndPosition = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetSpringArmStartOffsetInterpolationSpeedInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (SpringArmStartOffsetInterpolationSpeedInfo.IsSet())
+		{
+			OutValue = SpringArmStartOffsetInterpolationSpeedInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetSpringArmStartOffsetInterpolationSpeedInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		SpringArmStartOffsetInterpolationSpeedInfo = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetSpringArmEndOffsetInterpolationSpeedInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (SpringArmEndOffsetInterpolationSpeedInfo.IsSet())
+		{
+			OutValue = SpringArmEndOffsetInterpolationSpeedInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetSpringArmEndOffsetInterpolationSpeedInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		SpringArmEndOffsetInterpolationSpeedInfo = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool IsSpringArmEndOffsetByCurvePaused() const
+	{
+		return bPauseUseSpringArmEndOffsetByCurve;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetPauseUseSpringArmEndOffsetByCurve(bool bInPause)
+	{
+		bPauseUseSpringArmEndOffsetByCurve = bInPause;
+	}
+	// From Penguin Assistant End
+
 	UFUNCTION(BlueprintCallable)
 	bool TryGetFocusPoint(FVector& OutVector) const
 	{

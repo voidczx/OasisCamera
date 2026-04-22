@@ -13,6 +13,47 @@ class UOasisCameraSettingRuntimeData_FollowActorRotation : public UOasisCameraSe
 
 public:
 
+	// From Penguin Assistant Start
+	virtual void ClearRuntimeInterpolationData() override
+	{
+		FollowActorRotationInterpolationSpeedInfo.Reset();
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetFollowActorRotationInterpolationSpeedInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (FollowActorRotationInterpolationSpeedInfo.IsSet())
+		{
+			OutValue = FollowActorRotationInterpolationSpeedInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetFollowActorRotationInterpolationSpeedInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		FollowActorRotationInterpolationSpeedInfo = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetCanFollowActorRotationAccumulateTime(float& OutValue) const
+	{
+		if (CanFollowActorRotationAccumulateTime.IsSet())
+		{
+			OutValue = CanFollowActorRotationAccumulateTime.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetCanFollowActorRotationAccumulateTime(float InValue)
+	{
+		CanFollowActorRotationAccumulateTime = InValue;
+	}
+	// From Penguin Assistant End
+
 	TOptional<FRuntimeOasisCameraInterpolationSpeedInfo> FollowActorRotationInterpolationSpeedInfo;
 	TOptional<float> CanFollowActorRotationAccumulateTime;
 

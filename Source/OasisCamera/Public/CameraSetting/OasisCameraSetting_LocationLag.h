@@ -13,6 +13,42 @@ class UOasisCameraSettingRuntimeData_LocationLag : public UOasisCameraSettingRun
 
 public:
 
+	// From Penguin Assistant Start
+	UFUNCTION(BlueprintPure)
+	bool TryGetOldLocation(FVector& OutValue) const
+	{
+		if (OldLocation.IsSet())
+		{
+			OutValue = OldLocation.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetOldLocation(const FVector& InValue)
+	{
+		OldLocation = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetTargetLocation(FVector& OutValue) const
+	{
+		if (TargetLocation.IsSet())
+		{
+			OutValue = TargetLocation.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetTargetLocation(const FVector& InValue)
+	{
+		TargetLocation = InValue;
+	}
+	// From Penguin Assistant End
+
 	TOptional<FVector> OldLocation;
 	TOptional<FVector> TargetLocation;
 

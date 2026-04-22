@@ -14,6 +14,11 @@ class UOasisCameraSettingRuntimeData_LookAt : public UOasisCameraSettingRuntimeD
 
 public:
 
+	virtual void ClearRuntimeInterpolationData() override
+	{
+		TargetRotationInterpolationSpeedInfo.Reset();
+	}
+
 	UFUNCTION(BlueprintPure)
 	bool TryGetLockTargetPoint(FVector& OutVector) const
 	{
@@ -41,6 +46,40 @@ public:
 	void SetLockEnabled(bool bInEnabled)
 	{
 		bIsLockEnabled = bInEnabled;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetTargetRotationInterpolationSpeedInfo(FRuntimeOasisCameraInterpolationSpeedInfo& OutValue) const
+	{
+		if (TargetRotationInterpolationSpeedInfo.IsSet())
+		{
+			OutValue = TargetRotationInterpolationSpeedInfo.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetTargetRotationInterpolationSpeedInfo(const FRuntimeOasisCameraInterpolationSpeedInfo& InValue)
+	{
+		TargetRotationInterpolationSpeedInfo = InValue;
+	}
+
+	UFUNCTION(BlueprintPure)
+	bool TryGetCurrentLookRotation(FRotator& OutValue) const
+	{
+		if (CurrentLookRotation.IsSet())
+		{
+			OutValue = CurrentLookRotation.GetValue();
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentLookRotation(const FRotator& InValue)
+	{
+		CurrentLookRotation = InValue;
 	}
 
 	TOptional<FVector> LockTargetPoint;
